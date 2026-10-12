@@ -119,10 +119,38 @@ def extract(html):
     meta["names"], meta["subj"] = names, subj
     return events, meta
 
+def apply_overrides(events, meta, path):
+    """Ręczne korekty z overrides.json: "remove" (odwołane zajęcia danego dnia) i "add" (nowe/przeniesione zajęcia)."""
+    if not path.exists(): return events
+    ov = json.loads(path.read_text(encoding="utf-8"))
+    where = {iso: (d, w) for d, row in enumerate(meta["dates"]) for w, iso in enumerate(row)}
+    for r in ov.get("remove", []):
+        for iso in r["dates"]:
+            if iso not in where: print(f"UWAGA: data {iso} spoza planu – pomijam usunięcie"); continue
+            d, w = where[iso]; out = []; hit = False
+            for e in events:
+                if e[0] == d and e[1] <= w <= e[2] and e[5].startswith(r["code"]) and (not r.get("hours") or e[3] <= r["hours"][1] and e[4] >= r["hours"][0]):
+                    hit = True
+                    if e[1] <= w - 1: out.append(e[:2] + [w - 1] + e[3:])
+                    if w + 1 <= e[2]: out.append([e[0], w + 1] + e[2:])
+                else: out.append(e)
+            events = out
+            if not hit: print(f"UWAGA: {iso} {r['code']} – nie ma takich zajęć w planie (już usunięte przez uczelnię?)")
+    for a in ov.get("add", []):
+        if a["date"] not in where: print(f"UWAGA: data {a['date']} spoza planu – pomijam dodanie"); continue
+        d, w = where[a["date"]]; r1, r2 = a["hours"]
+        clash = [e for e in events if e[0] == d and e[1] <= w <= e[2] and e[3] <= r2 and e[4] >= r1]
+        if any(e[5] == a["code"] for e in clash):
+            print(f"INFO: {a['date']} {a['code']} – uczelnia już ma takie zajęcia w tym terminie, pomijam korektę"); continue
+        if clash: print(f"UWAGA: {a['date']} godz. {r1}-{r2} nakłada się na: {[e[5] for e in clash]}")
+        events.append([d, w, w, r1, r2, a["code"], a.get("who", ""), a.get("room", ""), a.get("grp", ""), a.get("note", "Zmiana ręczna")])
+    return events
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--src", default=URL); ap.add_argument("--out", required=True)
     a = ap.parse_args()
     ev, meta = extract(load(a.src))
+    ev = apply_overrides(ev, meta, Path(__file__).parent / "overrides.json")
     t = (Path(__file__).parent / "template.html").read_text(encoding="utf-8")
     dump = lambda o: json.dumps(o, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     t = t.replace("__EVENTS__", dump(ev)).replace("__META__", dump(meta)).replace("__UPD__", meta["upd"])
