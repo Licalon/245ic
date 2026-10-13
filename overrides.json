@@ -1,12 +1,18 @@
 {
   "remove": [
     {"code": "Os(wy)",  "dates": ["2026-10-19", "2026-10-26"], "note": "Bazy danych – wykłady odwołane"},
-    {"code": "Os(lab)", "dates": ["2026-10-21"],               "note": "Bazy danych – laboratorium odwołane"}
+    {"code": "Os(lab)", "dates": ["2026-10-21"],               "note": "Bazy danych – laboratorium odwołane"},
+    {"code": "Bsp(wy)", "dates": ["2026-10-20"],               "note": "Bezpieczeństwo systemów przechowywania danych – wykłady odwołane"},
+    {"code": "Bsp(lab)", "dates": ["2026-10-16,2026-10-23"],   "note": "Bezpieczeństwo systemów przechowywania danych – laboratorium odwołane"}
+    
   ],
   "add": [
     {"date": "2027-01-11", "hours": [1, 1],  "code": "Os(wy)",    "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Wykład z Baz danych przeniesiony z 19.10 i 26.10"},
     {"date": "2027-01-18", "hours": [9, 10], "code": "Os(wy)",    "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Wykład z Baz danych przeniesiony z 19.10 i 26.10"},
     {"date": "2027-02-01", "hours": [9, 10], "code": "Os(egz.0)", "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Egzamin zerowy z Baz danych (i przeniesiony wykład)"},
-    {"date": "2026-12-01", "hours": [3, 5],  "code": "Os(lab)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Laboratorium z Baz danych przeniesione z 21.10"}
+    {"date": "2026-12-01", "hours": [3, 5],  "code": "Os(lab)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Laboratorium z Baz danych przeniesione z 21.10"},
+    {"date": "2026-12-15", "hours": [3, 5],  "code": "Bsp(wy)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Wykład z Bezpieczeństwa systemów przechowywania danych przeniesiony z 20.10"},
+    {"date": "2026-12-04", "hours": [2, 4],  "code": "Bsp(lab)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Laboratorium z Bezpieczeństwa systemów przechowywania danych przeniesiony z 16.10"},
+    {"date": "2026-12-18", "hours": [2, 4],  "code": "Bsp(lab)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Laboratorium z Bezpieczeństwa systemów przechowywania danych przeniesiony z 23.10"}
   ]
 }
