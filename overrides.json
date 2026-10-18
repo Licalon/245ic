@@ -3,7 +3,8 @@
     {"code": "Os(wy)",  "dates": ["2026-10-19", "2026-10-26"], "note": "Bazy danych – wykłady odwołane"},
     {"code": "Os(lab)", "dates": ["2026-10-21"],               "note": "Bazy danych – laboratorium odwołane"},
     {"code": "Bsp1(wy)", "dates": ["2026-10-20"],               "note": "Bezpieczeństwo systemów przechowywania danych – wykłady odwołane"},
-    {"code": "Bsp1(lab)", "dates": ["2026-10-16", "2026-10-23"],   "note": "Bezpieczeństwo systemów przechowywania danych – laboratorium odwołane"}
+    {"code": "Bsp1(lab)", "dates": ["2026-10-16", "2026-10-23"],   "note": "Bezpieczeństwo systemów przechowywania danych – laboratorium odwołane"},
+    {"code": "Ja(ćw)", "dates": ["2026-10-20"],   "note": "zmiana"}
     
   ],
   "add": [
@@ -13,6 +14,7 @@
     {"date": "2026-12-01", "hours": [3, 5],  "code": "Os(lab)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Laboratorium z Baz danych przeniesione z 21.10"},
     {"date": "2026-12-15", "hours": [3, 5],  "code": "Bsp1(wy)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Wykład z Bezpieczeństwa systemów przechowywania danych przeniesiony z 20.10"},
     {"date": "2026-12-04", "hours": [2, 4],  "code": "Bsp1(lab)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Laboratorium z Bezpieczeństwa systemów przechowywania danych przeniesiony z 16.10"},
-    {"date": "2026-12-18", "hours": [2, 4],  "code": "Bsp1(lab)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Laboratorium z Bezpieczeństwa systemów przechowywania danych przeniesiony z 23.10"}
+    {"date": "2026-12-18", "hours": [2, 4],  "code": "Bsp1(lab)",   "who": "TrPa", "room": "",  "grp": "245IC_A1",   "note": "Laboratorium z Bezpieczeństwa systemów przechowywania danych przeniesiony z 23.10"}.
+    {"date": "2026-10-20", "hours": [7,9],  "code": "Ja(ćw)",   "who": "JoSol", "room": "",  "grp": "245IC_A1",   "note": "zmiana"}
   ]
 }
