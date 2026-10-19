@@ -2,7 +2,7 @@
 """Pobiera plan z wme.amw.gdynia.pl (Plansoft), odczytuje tabelę i generuje stronę HTML.
 Użycie:  python build_plan.py --out site/index.html            (pobiera z internetu)
          python build_plan.py --src plan.html --out out.html   (z zapisanego pliku)"""
-import argparse, datetime as dt, json, re, sys, time, urllib.request
+import argparse, datetime as dt, json, math, re, sys, time, urllib.request
 from pathlib import Path
 from bs4 import BeautifulSoup
 
@@ -119,31 +119,62 @@ def extract(html):
     meta["names"], meta["subj"] = names, subj
     return events, meta
 
+LESSONS = ["08:10", "09:00", "09:55", "10:45", "11:40", "12:30", "13:25", "14:15", "15:10", "16:05", "16:55", "17:45", "18:30"]
+_m = lambda s: int(s.split(":")[0]) * 60 + int(s.split(":")[1])
+
+def rowpos(t):
+    """Godzina -> położenie w siatce (0 = początek 1. lekcji, 12 = koniec 12.); wiersz i trwa od początku lekcji i do początku lekcji i+1."""
+    x, st = _m(t), [_m(v) for v in LESSONS]
+    if x <= st[0]: return 0.0
+    if x >= st[12]: return 12.0
+    i = max(k for k in range(12) if st[k] <= x)
+    return i + (x - st[i]) / (st[i + 1] - st[i])
+
 def apply_overrides(events, meta, path):
     """Ręczne korekty z overrides.json: "remove" (odwołane zajęcia danego dnia) i "add" (nowe/przeniesione zajęcia)."""
     if not path.exists(): return events
     ov = json.loads(path.read_text(encoding="utf-8"))
     where = {iso: (d, w) for d, row in enumerate(meta["dates"]) for w, iso in enumerate(row)}
+    dates_in = lambda v: re.findall(r"\d{4}-\d{2}-\d{2}", " ".join(map(str, v)) if isinstance(v, list) else str(v))
+    def canon(code):  # "Bsp(wy)" -> "Bsp1(wy)": dopasuj kod do tego, który naprawdę jest w planie (bez względu na cyfrę)
+        base, sep, rest = code.partition("(")
+        keys = set(meta["subj"]) | {e[5].split("(")[0] for e in events}
+        if base in keys: return code
+        hit = [k for k in keys if k.rstrip("0123456789") == base.rstrip("0123456789")]
+        if len(hit) == 1: return hit[0] + sep + rest
+        print(f"UWAGA: kod {code} nie występuje w planie – blok będzie bez koloru"); return code
     for r in ov.get("remove", []):
-        for iso in r["dates"]:
+        code = canon(r["code"]); ds = dates_in(r["dates"])
+        if not ds: print(f"UWAGA: brak poprawnych dat (RRRR-MM-DD) w wpisie {r['code']}")
+        for iso in ds:
             if iso not in where: print(f"UWAGA: data {iso} spoza planu – pomijam usunięcie"); continue
             d, w = where[iso]; out = []; hit = False
             for e in events:
-                if e[0] == d and e[1] <= w <= e[2] and e[5].startswith(r["code"]) and (not r.get("hours") or e[3] <= r["hours"][1] and e[4] >= r["hours"][0]):
+                if e[0] == d and e[1] <= w <= e[2] and e[5].startswith(code) and (not r.get("hours") or e[3] <= r["hours"][1] and e[4] >= r["hours"][0]):
                     hit = True
                     if e[1] <= w - 1: out.append(e[:2] + [w - 1] + e[3:])
                     if w + 1 <= e[2]: out.append([e[0], w + 1] + e[2:])
                 else: out.append(e)
             events = out
-            if not hit: print(f"UWAGA: {iso} {r['code']} – nie ma takich zajęć w planie (już usunięte przez uczelnię?)")
+            if not hit: print(f"UWAGA: {iso} {code} – nie ma takich zajęć w planie (już usunięte przez uczelnię?)")
     for a in ov.get("add", []):
-        if a["date"] not in where: print(f"UWAGA: data {a['date']} spoza planu – pomijam dodanie"); continue
-        d, w = where[a["date"]]; r1, r2 = a["hours"]
+        ds = dates_in(a["date"])
+        if not ds or ds[0] not in where: print(f"UWAGA: data {a['date']} spoza planu – pomijam dodanie"); continue
+        code = canon(a["code"]); d, w = where[ds[0]]; extra = []
+        if a.get("time"):                                   # niestandardowe godziny, np. ["13:15", "15:30"]
+            tm = [x.strip() for x in a["time"]]
+            if len(tm) != 2 or not all(re.fullmatch(r"\d{1,2}:\d{2}", x) for x in tm) or _m(tm[0]) >= _m(tm[1]):
+                print(f"UWAGA: zły zapis godzin {a['time']} (ma być [\"13:15\", \"15:30\"]) – pomijam"); continue
+            top, bot = rowpos(tm[0]), rowpos(tm[1])
+            r1, r2 = int(top) + 1, max(int(top) + 1, math.ceil(bot - 1e-9))
+            extra = [round(top - int(top), 3), round(bot - top, 3), f"{tm[0]}–{tm[1]}"]
+        else:
+            r1, r2 = a["hours"]
         clash = [e for e in events if e[0] == d and e[1] <= w <= e[2] and e[3] <= r2 and e[4] >= r1]
-        if any(e[5] == a["code"] for e in clash):
-            print(f"INFO: {a['date']} {a['code']} – uczelnia już ma takie zajęcia w tym terminie, pomijam korektę"); continue
-        if clash: print(f"UWAGA: {a['date']} godz. {r1}-{r2} nakłada się na: {[e[5] for e in clash]}")
-        events.append([d, w, w, r1, r2, a["code"], a.get("who", ""), a.get("room", ""), a.get("grp", ""), a.get("note", "Zmiana ręczna")])
+        if any(e[5] == code for e in clash):
+            print(f"INFO: {ds[0]} {code} – uczelnia już ma takie zajęcia w tym terminie, pomijam korektę"); continue
+        if clash: print(f"UWAGA: {ds[0]} godz. {r1}-{r2} nakłada się na: {[e[5] for e in clash]}")
+        events.append([d, w, w, r1, r2, code, a.get("who", ""), a.get("room", ""), a.get("grp", ""), a.get("note", "Zmiana ręczna")] + extra)
     return events
 
 def main():
