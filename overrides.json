@@ -7,11 +7,11 @@
     {"code": "Ja(ćw)", "dates": ["2026-10-20"],                 "note": "Język angielski – przeniesiony na późniejszą godzinę"}
   ],
   "add": [
-    {"date": "2027-01-11", "hours": [1, 1],  "code": "Os(wy)",    "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Wykład z Baz danych przeniesiony z 19.10 i 26.10"},
-    {"date": "2027-01-18", "hours": [9, 10], "code": "Os(wy)",    "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Wykład z Baz danych przeniesiony z 19.10 i 26.10"},
+    //{"date": "2027-01-11", "hours": [1, 1],  "code": "Os(wy)",    "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Wykład z Baz danych przeniesiony z 19.10 i 26.10"},
+    //{"date": "2027-01-18", "hours": [9, 10], "code": "Os(wy)",    "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Wykład z Baz danych przeniesiony z 19.10 i 26.10"},
     {"date": "2027-02-01", "hours": [9, 10], "code": "Os(egz.0)", "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Egzamin zerowy z Baz danych (i przeniesiony wykład)"},
-    {"date": "2026-12-01", "hours": [3, 5],  "code": "Os(lab)",   "who": "TrPa", "room": "", "grp": "245IC_A1",   "note": "Laboratorium z Baz danych przeniesione z 21.10"},
-    {"date": "2026-12-15", "hours": [3, 5],  "code": "Bsp1(wy)",  "who": "TrPa", "room": "", "grp": "245IC_A1",   "note": "Wykład z Bezpieczeństwa systemów przechowywania danych przeniesiony z 20.10"},
+    //{"date": "2026-12-01", "hours": [3, 5],  "code": "Os(lab)",   "who": "TrPa", "room": "", "grp": "245IC_A1",   "note": "Laboratorium z Baz danych przeniesione z 21.10"},
+    //{"date": "2026-12-15", "hours": [3, 5],  "code": "Bsp1(wy)",  "who": "TrPa", "room": "", "grp": "245IC_A1",   "note": "Wykład z Bezpieczeństwa systemów przechowywania danych przeniesiony z 20.10"},
     {"date": "2026-12-04", "hours": [2, 4],  "code": "Bsp1(lab)", "who": "TrPa", "room": "", "grp": "245IC_A1",   "note": "Laboratorium z Bezpieczeństwa systemów przechowywania danych przeniesione z 16.10"},
     {"date": "2026-12-18", "hours": [2, 4],  "code": "Bsp1(lab)", "who": "TrPa", "room": "", "grp": "245IC_A1",   "note": "Laboratorium z Bezpieczeństwa systemów przechowywania danych przeniesione z 23.10"},
     {"date": "2026-10-20", "time": ["13:15", "15:30"], "code": "Ja(ćw)", "who": "JaSo", "room": "", "grp": "245IC_A", "note": "Język angielski przeniesiony na 13:15–15:30"}
