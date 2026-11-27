@@ -2,13 +2,11 @@
   "remove": [
     {"code": "Os(wy)",  "dates": ["2026-10-19", "2026-10-26"], "note": "Bazy danych – wykłady odwołane"},
     {"code": "Os(lab)", "dates": ["2026-10-21"],               "note": "Bazy danych – laboratorium odwołane"},
-    {"code": "Bsp1(wy)", "dates": ["2026-10-20"],              "note": "Bezpieczeństwo systemów przechowywania danych – wykłady odwołane"},
     {"code": "Ja(ćw)", "dates": ["2026-10-20"],                 "note": "Język angielski – przeniesiony na późniejszą godzinę"},
     {"code": "Ozo(wy)",  "dates": ["2026-10-30"], "note": "wykłady odwołane"}
   ],
   "add": [
     {"date": "2027-02-01", "hours": [9, 10], "code": "Os(egz.0)", "who": "TrPa", "room": "", "grp": "242I; 245I", "note": "Egzamin zerowy z Baz danych (i przeniesiony wykład)"},
-    {"date": "2026-12-15", "hours": [3, 5],  "code": "Bsp1(wy)",  "who": "TrPa", "room": "", "grp": "245IC_A1",   "note": "Wykład z Bezpieczeństwa systemów przechowywania danych przeniesiony z 20.10"},
     {"date": "2026-10-20", "time": ["13:15", "15:30"], "code": "Ja(ćw)", "who": "JaSo", "room": "", "grp": "245IC_A", "note": "Język angielski przeniesiony na 13:15–15:30"}
   ]
 }
